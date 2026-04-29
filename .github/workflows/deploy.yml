@@ -24,17 +24,17 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload package to S3
-        run: aws s3 cp app.zip s3://demo-beanstalk-2026/app-${{ github.run_number }}.zip
+        run: aws s3 cp app.zip s3://demo-beanstalk-act/app-${{ github.run_number }}.zip
 
       - name: Create new Beanstalk application version
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name demo-app \
+            --application-name demo-env \
             --version-label v-${{ github.run_number }} \
-            --source-bundle S3Bucket=demo-beanstalk-2026,S3Key=app-${{ github.run_number }}.zip
+            --source-bundle S3Bucket=demo-beanstalk-act,S3Key=app-${{ github.run_number }}.zip
 
       - name: Deploy to Beanstalk environment
         run: |
           aws elasticbeanstalk update-environment \
-            --environment-name demo-env \
+            --environment-name Webserverenvironment-env \
             --version-label v-${{ github.run_number }}
